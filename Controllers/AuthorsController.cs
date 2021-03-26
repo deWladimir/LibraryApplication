@@ -220,12 +220,22 @@ namespace LibraryApplication.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var author = await _context.Authors.FindAsync(id);
-            foreach (var item in _context.AuthorsCountries)
+            var authorsCountries = _context.AuthorsCountries.Where(obj => obj.Author.Id == id);
+            foreach (var item in authorsCountries)
             {
-                if (item.AuthorId == author.Id)
-                {
-                    _context.AuthorsCountries.Remove(item);
+                _context.AuthorsCountries.Remove(item);
+            }
+            var authorsBooks = _context.AuthorsBooks.Where(obj => obj.AuthorId == id);
+            foreach (var item in authorsBooks)
+            {
+                var genresBooks = _context.GenresBooks.Where(obj => obj.BookId == item.BookId);
+                foreach (var gb in genresBooks)
+                {         
+                    _context.GenresBooks.Remove(gb);
                 }
+                var book = _context.Books.Where(obj => obj.Id == item.BookId).FirstOrDefault();
+                _context.AuthorsBooks.Remove(item);
+                _context.Books.Remove(book);
             }
             _context.Authors.Remove(author);
             await _context.SaveChangesAsync();

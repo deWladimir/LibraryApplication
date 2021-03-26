@@ -292,6 +292,16 @@ namespace LibraryApplication.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var book = await _context.Books.FindAsync(id);
+            var authorBooks = _context.AuthorsBooks.Where(obj => obj.BookId == id);
+            foreach (var item in authorBooks)
+            {
+                _context.AuthorsBooks.Remove(item);
+            }
+            var genresBooks = _context.GenresBooks.Where(obj => obj.BookId == id);
+            foreach (var item in genresBooks)
+            {
+                _context.GenresBooks.Remove(item);
+            }
             _context.Books.Remove(book);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
