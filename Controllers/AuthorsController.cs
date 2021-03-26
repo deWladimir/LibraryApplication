@@ -34,7 +34,7 @@ namespace LibraryApplication.Controllers
             var author = await _context.Authors
                 .FirstOrDefaultAsync(m => m.Id == id);
             Dictionary<int, string> thisCountries = new Dictionary<int, string>();
-            var authorsCountries = _context.AuthorsCountries.Where(obj => obj.AuthorId == author.Id);
+            var authorsCountries = thisAuthorCountries(author.Id);
             foreach (var item in authorsCountries)
             {
                 thisCountries.Add(item.CountryId, _context.Countries.Where(obj => obj.Id == item.CountryId).FirstOrDefault().Name);
@@ -103,16 +103,14 @@ namespace LibraryApplication.Controllers
             var author = await _context.Authors.FindAsync(id);
             Dictionary<int, string> countries = new Dictionary<int, string>();
             Dictionary<int, string> otherCountries =  new Dictionary<int, string>();
-            foreach (var item in _context.AuthorsCountries)
+            var authorsCountries = thisAuthorCountries(author.Id);
+            foreach (var item in authorsCountries)
             {
-                if (item.AuthorId == id)
-                {
                     string name = _context.Countries.Where(obj => obj.Id == item.CountryId).FirstOrDefault().Name;
                     if (name != "Інтернаціональ")
                     {
                         countries.Add(item.CountryId, name);
                     }
-                }
             }
 
             ViewBag.Countries = countries;
@@ -120,9 +118,7 @@ namespace LibraryApplication.Controllers
             {
                 if ((!countries.ContainsKey(item.Id)) && item.Name!="Інтернаціональ" ) otherCountries.Add(item.Id, item.Name);
             }
-
             ViewBag.OtherCountries = otherCountries;
-
             if (author == null)
             {
                 return NotFound();
@@ -147,12 +143,10 @@ namespace LibraryApplication.Controllers
                 try
                 {
                     _context.Update(author);
-                    foreach (var item in _context.AuthorsCountries)
+                    var authorsCountries = thisAuthorCountries(id);
+                    foreach (var item in authorsCountries)
                     {
-                        if (item.AuthorId == author.Id)
-                        {
                             _context.AuthorsCountries.Remove(item);
-                        }
                     }
                     if (countries.Length == 0)
                     {
@@ -196,14 +190,14 @@ namespace LibraryApplication.Controllers
             var author = await _context.Authors
                 .FirstOrDefaultAsync(m => m.Id == id);
             List<string> CNames = new List<string>();
-            foreach (var item in _context.AuthorsCountries)
+
+            var authorsCountries = thisAuthorCountries(author.Id);
+            foreach (var item in authorsCountries)
             {
-                if (item.AuthorId == id)
-                {
                     var obj = _context.Countries.Where(obj => obj.Id == item.CountryId).FirstOrDefault().Name;
                     CNames.Add(obj);
-                }
             }
+
             ViewBag.CNames = CNames;
 
             if (author == null)
@@ -220,7 +214,7 @@ namespace LibraryApplication.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var author = await _context.Authors.FindAsync(id);
-            var authorsCountries = _context.AuthorsCountries.Where(obj => obj.Author.Id == id);
+            var authorsCountries = thisAuthorCountries(author.Id);
             foreach (var item in authorsCountries)
             {
                 _context.AuthorsCountries.Remove(item);
@@ -246,5 +240,11 @@ namespace LibraryApplication.Controllers
         {
             return _context.Authors.Any(e => e.Id == id);
         }
+
+        IQueryable<AuthorsCountry> thisAuthorCountries(int id)
+        {
+            return _context.AuthorsCountries.Where(obj=>obj.AuthorId==id);
+        }
+
     }
 }
