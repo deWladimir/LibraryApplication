@@ -1,0 +1,50 @@
+﻿@model IEnumerable<LibraryApplication.Book>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<style>
+    .layer1 {
+        background-color: #47e59111;
+        padding: 10px;
+    }
+
+    .layer2 {
+        background-color: #5447e511;
+        margin-top: 10px;
+        padding: 20px;
+    }
+</style>
+
+<div align="center" class="layer1">
+<h1>Книжки</h1>
+<p>
+    <a asp-action="Create">Додати нову</a>
+</p>
+</div>
+<div class="layer2">
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.ActionLink((string)@item.Name, "Details", "Books", new { id = (int)@item.Id }, null)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Редагувати</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Видалити</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+</div>

@@ -1,0 +1,67 @@
+﻿@model IEnumerable<LibraryApplication.Country>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<style>
+    .layer1 {
+        background-color: #d9c83011;
+        padding: 10px;
+    }
+
+    .layer2 {
+        background-color: #30d9d911;
+        margin-top: 10px;
+        padding: 20px;
+    }
+</style>
+
+<div class="layer1" align="center"><h1>Країни</h1>
+<p>
+    <a asp-action="Create">Додати країну</a>
+</p>
+    </div>
+
+<div class="layer2">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                if (item.Name != "Інтернаціональ")
+                {
+                    <tr>
+                        <td>
+                            @Html.ActionLink((string)@item.Name, "Details","Countries", new { id = (int)@item.Id }, null)
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id">Редагувати</a>
+                        </td>
+                    </tr>
+
+                }
+
+                if (item.Name == "Інтернаціональ")
+                {
+                    <tr>
+                        <td>
+                            @Html.ActionLink((string)@item.Name, "Details", "Countries", new { id = (int)@item.Id }, null)
+                        </td>
+                        <td>
+                            <a asp-action="Details" asp-route-id="@item.Id">Інтернаціональні автори</a>
+                        </td>
+                    </tr>
+
+                }
+            }
+        </tbody>
+    </table>
+</div>

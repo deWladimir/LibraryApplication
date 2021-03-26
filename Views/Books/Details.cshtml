@@ -1,0 +1,49 @@
+﻿@model LibraryApplication.Book
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<style>
+    .layer1 {
+        background-color: #9ee8c0;
+        padding: 10px;
+    }
+    .layer2 {
+        margin-left: 20px;
+        background-color: #18999011;
+    }
+    li {
+        list-style-type: none;
+    }
+    </style>
+
+<div align="center">
+<h1>@Model.Name</h1>
+</div>
+<div align="left">
+    <p>@Model.Name, @Model.PagesQuantity сторінок <a href="@Model.Pdf" target="_blank">(Читати)|</a><a asp-action="Download" asp-route-id="@Model.Id">(Завантажити)</a></p>    
+</div>
+<div>
+    <div><img src="@Model.Picture" align="left" class="layer1" height="390" width="264">
+         <div class="layer2">
+             <ul><b>Автори:</b>
+    @foreach (var i in ViewBag.ThisAuthors)
+    {
+<li>@Html.ActionLink((string)@i.Value, "Details", "Authors", new { id = (int)@i.Key }, null)</li>
+                 }
+             </ul>
+             <h2>@Html.DisplayNameFor(model => model.Info)</h2>
+             <p>@Model.Info</p>
+                    <ul><b>Жанри:</b>
+                        @foreach (var item in ViewBag.ThisGenres)
+                        {
+                            <li>@Html.ActionLink((string)@item.Value, "Details", "Genres", new { id = (int)@item.Key }, null)</li>
+                        }
+                    </ul>
+         </div></div> 
+    </div>
+
+<div>
+    <a asp-action="Index">До списку книжок</a>
+</div>

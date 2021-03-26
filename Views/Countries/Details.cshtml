@@ -1,0 +1,37 @@
+﻿@model LibraryApplication.Country
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<style>
+    .layer1 {
+        background-color: #d9c83011;
+        padding: 10px;
+    }
+
+    .layer2 {
+        background-color: #30d9d911;
+        margin-top: 10px;
+        padding: 20px;
+    }
+    li {
+        list-style-type: none;
+    }
+</style>
+
+<div class="layer1" align="center">
+    <h1>@Model.Name</h1>
+</div>
+<div class="layer2">
+    <ul><b>Автори з цієї держави:</b>
+        @foreach (var item in ViewBag.ThisAuthors)
+        {
+            <li>
+                @Html.ActionLink((string)@item.Value, "Details", "Authors", new { id = (int)@item.Key }, null)
+                </li>
+            }
+    </ul>
+</div>
+
+

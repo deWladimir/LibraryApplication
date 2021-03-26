@@ -1,0 +1,67 @@
+﻿@model LibraryApplication.Book
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Видалити</h1>
+
+<h3>Ви впевнені?</h3>
+<div>
+    <h4>Книжка</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Info)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Info)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.PagesQuantity)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PagesQuantity)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Picture)
+        </dt>
+        <dd class="col-sm-10">
+            <img src= "@Model.Picture">
+        </dd>
+        <dt class="col-sm-2">
+            Жанри
+        </dt>
+        <dd class="col-sm-10">
+            <ul>
+                @foreach (var g in ViewBag.ThisGenres)
+                {
+                    <li>@Html.ActionLink((string)g.Value, "Details", "Genres", new { id = (int)g.Key }, null)</li>
+                }
+            </ul>
+        </dd>
+        <dt class="col-sm-2">
+            Автори
+        </dt>
+        <dd class="col-sm-10">
+            <ul>
+                @foreach (var a in ViewBag.ThisAuthors)
+                {
+                    <li>@Html.ActionLink((string)a.Value, "Details", "Authors", new { id=(int)a.Key}, null)</li>
+                }
+            </ul>
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="Index">Назад до списку</a>
+    </form>
+</div>

@@ -1,0 +1,52 @@
+﻿@model LibraryApplication.Author
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<style>
+    .layer1 {
+        background-color: #b614c411;
+        padding: 10px;
+    }
+
+    .layer2 {
+        background-color: #78471011;
+        margin-top: 10px;
+        padding: 20px;
+    }
+    .layer3 {
+        background-color: #14c4a411;
+        margin-top: 10px;
+        padding: 20px;
+    }
+    li {
+        list-style-type: none;
+    }
+</style>
+
+<div class="layer1" align="center">
+    <h1>@Model.FirstName @Model.LastName</h1>
+</div>
+
+<div class="layer2">
+<p>Роки життя: @Model.BirthYear - @Model.DeathYear</p>
+<h2>@Html.DisplayNameFor(model => model.Info)</h2>
+<p>@Model.Info</p>
+ <ul><b>Країни, в яких жив автор:</b>
+    @foreach (var item in ViewBag.ThisCountries)
+    {
+        <li>@Html.ActionLink((string)@item.Value, "Details", "Countries", new { id = (int)@item.Key}, null)</li>
+    }
+    </ul>
+</div>
+<div class="layer3">
+    <ul>
+        <b>Книжки автора:</b>
+        @foreach (var item in ViewBag.ThisBooks)
+        {
+            <li>@Html.ActionLink((string)@item.Value, "Details", "Books", new { id = (int)@item.Key }, null)</li>
+        }
+    </ul>
+</div>
+

@@ -1,0 +1,104 @@
+﻿@model LibraryApplication.Book
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js" integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A==" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" integrity="sha512-nMNlpuaDPrqlEls3IX/Q56H36qvBASwb3ipuo3MxeWbsQB1881ox0cRv7UPTgBlriqoynt35KjEwgGUeUXIPnw==" crossorigin="anonymous" />
+<script>
+    $(document).ready(function () {
+        $('#genreschoose').select2({});
+    }
+    );
+</script>
+
+<script>
+    $(document).ready(function () {
+        $('#authorschoose').select2({});
+    }
+    );
+</script>
+
+<h1>Додати нову книжку</h1>
+
+<h4>Книжка</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Info" class="control-label"></label>
+                <input asp-for="Info" class="form-control" />
+                <span asp-validation-for="Info" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Fb2" class="control-label"></label>
+                <input asp-for="Fb2" class="form-control" placeholder="/css/fb2Books/ім’я_файлу" title="/css/fb2Books/ім’я_файлу" />
+                <span asp-validation-for="Fb2" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Pdf" class="control-label"></label>
+                <input asp-for="Pdf" class="form-control" placeholder="/css/pdfBooks/ім’я_файлу" title="/css/pdfBooks/ім’я_файлу" />
+                <span asp-validation-for="Pdf" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PagesQuantity" class="control-label"></label>
+                <input asp-for="PagesQuantity" class="form-control" />
+                <span asp-validation-for="PagesQuantity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Picture" class="control-label"></label>
+                <input asp-for="Picture" class="form-control" placeholder="/css/covers/ім’я_файлу" title="/css/covers/ім’я_файлу" />
+                <span asp-validation-for="Picture" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label>Виберіть жанр</label>
+                <select id="genreschoose" multiple name="genres">
+                    @if (ViewBag.Genres == null)
+                    {
+                    }
+                    @foreach (var item in ViewBag.Genres)
+                    {
+                        <option value=@item.Id>@item.Name</option>
+                    }
+
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Виберіть автора</label>
+                <select id="authorschoose" multiple name="authors">
+                    @if (ViewBag.Authors == null)
+                    {
+                    }
+                    @foreach (var item in ViewBag.Authors)
+                    {
+                        <option value=@item.Id>@item.FirstName  @item.LastName</option>
+                    }
+
+                </select>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Додати" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">До списку книжок</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

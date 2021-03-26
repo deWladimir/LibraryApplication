@@ -1,0 +1,31 @@
+﻿@model LibraryApplication.Genre
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div align="center">
+    <h1>@Model.Name</h1>
+</div>
+<style>
+    .layer1 {
+        background-color: #9ee8c0;
+        padding: 10px;
+    }
+    .layer2 {
+        background-color: #408fbd11;
+        margin-top: 10px;
+        padding: 20px;
+    }
+    li{
+        list-style-type: none;
+    }
+    </style>
+<div><p class="layer1">@Model.Info</p>
+    <div class="layer2">
+        <ul><b>Книжки за цим жанром:</b>
+            @foreach (var item in ViewBag.ThisBooks)
+            {
+                <li>@Html.ActionLink((string)@item.Value, "Details", "Books", new { id = (int)@item.Key}, null)</li>
+            }</ul>
+        </div></div>
