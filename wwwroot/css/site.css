@@ -2,14 +2,14 @@
 for details on configuring this project to bundle and minify static web assets. */
 
 a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
+  white-space: normal !important;
+  text-align: center !important;
+  word-break: break-all !important;
 }
 
 /* Provide sufficient contrast against white background */
 a {
-  color: #0366d6;
+  color: #0366d6 !important;
 }
 
 .btn-primary {

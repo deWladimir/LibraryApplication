@@ -35,8 +35,6 @@
     <tbody>
         @foreach (var item in Model)
         {
-            @if (item.FirstName != "Автор" && item.LastName != "Невідомий")
-            {
                 <tr>
                     <td>
                         @Html.ActionLink((string)@item.FirstName + " " + @item.LastName, "Details", "Authors", new { id = (int)@item.Id }, null)
@@ -46,18 +44,6 @@
                         <a asp-action="Delete" asp-route-id="@item.Id">Видалити</a>
                     </td>
                 </tr>
-            }
-            @if (item.FirstName == "Автор" && item.LastName == "Невідомий")
-            {
-                <tr>
-                    <td>
-                        @Html.ActionLink((string)@item.FirstName + " " + @item.LastName, "Details", "Authors", new { id = (int)@item.Id }, null)
-                    </td>
-                    <td>
-                        <a asp-action="Details" asp-route-id="@item.Id">Хроніки Невідомого Автора</a>
-                    </td>
-                </tr>
-            }
         }
     </tbody>
 </table>

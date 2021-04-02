@@ -36,7 +36,7 @@
  <ul><b>Країни, в яких жив автор:</b>
     @foreach (var item in ViewBag.ThisCountries)
     {
-        <li>@Html.ActionLink((string)@item.Value, "Details", "Countries", new { id = (int)@item.Key}, null)</li>
+        <li>@Html.ActionLink((string)@item.GetType().GetProperty("Name").GetValue(item, null), "Details", "Countries", new { id = (int)@item.GetType().GetProperty("Id").GetValue(item, null)}, null)</li>
     }
     </ul>
 </div>
@@ -45,7 +45,7 @@
         <b>Книжки автора:</b>
         @foreach (var item in ViewBag.ThisBooks)
         {
-            <li>@Html.ActionLink((string)@item.Value, "Details", "Books", new { id = (int)@item.Key }, null)</li>
+            <li>@Html.ActionLink((string)@item.GetType().GetProperty("Name").GetValue(item, null), "Details", "Books", new { id = (int)@item.GetType().GetProperty("Id").GetValue(item, null) }, null)</li>
         }
     </ul>
 </div>

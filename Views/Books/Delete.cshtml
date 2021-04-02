@@ -33,7 +33,7 @@
             @Html.DisplayNameFor(model => model.Picture)
         </dt>
         <dd class="col-sm-10">
-            <img src= "@Model.Picture">
+            @Html.DisplayFor(model => model.Picture)
         </dd>
         <dt class="col-sm-2">
             Жанри
@@ -42,7 +42,7 @@
             <ul>
                 @foreach (var g in ViewBag.ThisGenres)
                 {
-                    <li>@Html.ActionLink((string)g.Value, "Details", "Genres", new { id = (int)g.Key }, null)</li>
+                    <li>@g.GetType().GetProperty("Name").GetValue(g, null)</li>
                 }
             </ul>
         </dd>
@@ -53,7 +53,7 @@
             <ul>
                 @foreach (var a in ViewBag.ThisAuthors)
                 {
-                    <li>@Html.ActionLink((string)a.Value, "Details", "Authors", new { id=(int)a.Key}, null)</li>
+                <li>@a.GetType().GetProperty("FullName").GetValue(a, null)</li>
                 }
             </ul>
         </dd>

@@ -34,13 +34,12 @@ namespace LibraryApplication.Controllers
 
             var genre = await _context.Genres
                 .FirstOrDefaultAsync(m => m.Id == id);
-            var genresBooks = _context.GenresBooks.Where(obj => obj.GenreId == genre.Id);
-            Dictionary<int, string> thisBooks = new Dictionary<int, string>();
-            foreach (var g in genresBooks)
+          
+            ViewBag.ThisBooks = _context.GenresBooks.Where(obj => obj.GenreId == id).Join(_context.Books, g => g.BookId, b => b.Id, (g, b) => new
             {
-                thisBooks.Add(g.BookId, _context.Books.Where(obj => obj.Id == g.BookId).FirstOrDefault().Name);
-            }
-            ViewBag.ThisBooks = thisBooks;
+                Id = g.GenreId,
+                Name = b.Name
+            });
 
             if (genre == null)
             {

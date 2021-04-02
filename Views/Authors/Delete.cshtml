@@ -46,9 +46,9 @@
         </dt>
         <dd class="col-sm-10">
             <ul>
-           @foreach (string s in ViewBag.CNames)
+           @foreach (var s in ViewBag.CNames)
            {
-               <li>@s</li>
+               <li>@s.GetType().GetProperty("Name").GetValue(s, null)</li>
            }
                 </ul>
         </dd>

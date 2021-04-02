@@ -2,25 +2,17 @@
     ViewData["Title"] = "Country Filter";
 }
 
-<head>
-    <link rel="stylesheet" type="text/css" href="~/css/StyleSheet.css" />
-</head>
-
-
-<div class="sidenav">
-    <p font-size="25px"><b>Книжки за жанрами</b></p>
-    @foreach (var g in ViewBag.Genres)
-    {
-        <p>@Html.ActionLink((string)@g.Name, "GenreFilter", "Home", new { id = (int)@g.Id })</p>
+<style>
+    .layer2 {
+        background-color: #408fbd11;
+        margin-top: 10px;
+        padding: 20px;
     }
-    <p font-size="25px"><b>Автори за країною</b></p>
-    @foreach (var c in ViewBag.Countries)
-    {
-        <p>@Html.ActionLink((string)@c.Name, "CountryFilter", "Home", new { id = (int)@c.Id })</p>
+    .li {
+        text-align: center;
     }
-</div>
-
-<div class="main">
+</style>
+<div class="layer2" text-align="center">
     <h1>@ViewBag.Country</h1>
     <ul>
         @foreach (var item in ViewBag.ThisAuthors)

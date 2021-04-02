@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-
+using LibraryApplication.Validators;
 #nullable disable
 
 namespace LibraryApplication
 {
+    [CountryValidator(ErrorMessage ="Така країна вже існує")]
     public partial class Country
     {
         public Country()

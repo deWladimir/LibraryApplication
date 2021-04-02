@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-
+using LibraryApplication.Validators;
 #nullable disable
 
 namespace LibraryApplication
 {
+    [AuthorValidator(ErrorMessage = "Рік смерті не може бути менше року народження")]
     public partial class Author
     {
         public Author()

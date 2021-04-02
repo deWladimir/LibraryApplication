@@ -34,16 +34,13 @@ namespace LibraryApplication.Controllers
 
             var country = await _context.Countries
                 .FirstOrDefaultAsync(m => m.Id == id);
-            Dictionary<int, string> thisAuthors = new Dictionary<int, string>();
-            var authorsCountries = _context.AuthorsCountries.Where(obj => obj.CountryId == country.Id);
-            foreach (var a in authorsCountries)
+            
+            ViewBag.ThisAuthors = _context.AuthorsCountries.Where(obj=>obj.CountryId == id).Join(_context.Authors, c => c.AuthorId, a=>a.Id, (c, a)=>new 
             {
-                    var author = _context.Authors.Where(obj => obj.Id == a.AuthorId).FirstOrDefault();
-                string fullName = author.FirstName + " " + author.LastName;
-                    thisAuthors.Add(a.AuthorId, fullName);
-                
-            }
-            ViewBag.ThisAuthors = thisAuthors;
+                Id = c.AuthorId,
+                FullName = a.FirstName + " " +a.LastName
+            });
+
             if (country == null)
             {
                 return NotFound();

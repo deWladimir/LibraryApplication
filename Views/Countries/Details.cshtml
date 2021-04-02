@@ -28,7 +28,7 @@
         @foreach (var item in ViewBag.ThisAuthors)
         {
             <li>
-                @Html.ActionLink((string)@item.Value, "Details", "Authors", new { id = (int)@item.Key }, null)
+                @Html.ActionLink((string)@item.GetType().GetProperty("FullName").GetValue(item, null), "Details", "Authors", new { id = (int)@item.GetType().GetProperty("Id").GetValue(item, null) }, null)
                 </li>
             }
     </ul>

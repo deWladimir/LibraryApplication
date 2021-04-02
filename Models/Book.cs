@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using LibraryApplication.Validators;
 
 #nullable disable
 
 namespace LibraryApplication
 {
+    [BookValidator(ErrorMessage ="Така книжка вже існує")]
     public partial class Book
     {
         public Book()

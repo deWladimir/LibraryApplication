@@ -72,5 +72,19 @@ namespace LibraryApplication.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        
+        [HttpPost]
+        public IActionResult Search(string query)
+        {
+            List<Author> authors = _context.Authors.Where(obj => (obj.FirstName + " " + obj.LastName).Contains(query)).ToList();
+            List<Book> books = _context.Books.Where(obj => obj.Name.Contains(query)).ToList();
+            ViewBag.Authors = authors;
+            ViewBag.Books = books;
+            ViewBag.BNumber = books.Count();
+            ViewBag.ANumber = authors.Count();
+            ViewBag.Query = query;
+            return View();
+        }
     }
 }

@@ -33,27 +33,23 @@ namespace LibraryApplication.Controllers
             }
             var author = await _context.Authors
                 .FirstOrDefaultAsync(m => m.Id == id);
-            Dictionary<int, string> thisCountries = new Dictionary<int, string>();
-            var authorsCountries = thisAuthorCountries(author.Id);
-            foreach (var item in authorsCountries)
-            {
-                thisCountries.Add(item.CountryId, _context.Countries.Where(obj => obj.Id == item.CountryId).FirstOrDefault().Name);
-            }
-            ViewBag.ThisCountries = thisCountries;
 
-            Dictionary<int, string> thisBooks = new Dictionary<int, string>();
-            var authorsBooks = _context.AuthorsBooks.Where(obj => obj.AuthorId == author.Id);
-            foreach (var item in authorsBooks)
+            ViewBag.ThisCountries = _context.AuthorsCountries.Where(obj => obj.AuthorId == id).Join(_context.Countries, a => a.CountryId, c => c.Id, (a, c) => new
             {
-                thisBooks.Add(item.BookId, _context.Books.Where(obj => obj.Id == item.BookId).FirstOrDefault().Name);
-            }
-            ViewBag.ThisBooks = thisBooks;
+                Id = a.CountryId,
+                Name = c.Name
+            });
+
+            ViewBag.ThisBooks = _context.AuthorsBooks.Where(obj => obj.AuthorId == id).Join(_context.Books, a => a.BookId, b => b.Id, (a, b) => new
+            {
+                Id = b.Id,
+                Name = b.Name
+            });
+
             if (author == null)
             {
                 return NotFound();
             }
-
-            //if (CId.Count == 0) return RedirectToAction(nameof(Index));
 
             return View(author);
         }
@@ -61,7 +57,7 @@ namespace LibraryApplication.Controllers
         // GET: Authors/Create
         public IActionResult Create()
         {
-            ViewBag.CountriesList = _context.Countries.Where(obj=> obj.Name != "Інтернаціональ").ToList();
+            ViewBag.CountriesList = _context.Countries.ToList();
             return View();
         }
 
@@ -70,17 +66,30 @@ namespace LibraryApplication.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,Info,BirthYear,DeathYear")] Author author, int[] countries)
+        public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,Info,BirthYear,DeathYear")] Author author, List<int> countries)
         {
+            var IsRepeat = _context.Authors.Where(obj => obj.FirstName == author.FirstName && obj.LastName == author.LastName && obj.BirthYear == author.BirthYear);
+            foreach(var item in IsRepeat)
+            {
+                bool flag = false;
+                var IsRepeatCountries = thisAuthorCountries(item.Id);
+                foreach (var c in countries)
+                {
+                    if (IsRepeatCountries.Where(obj=>obj.CountryId==c).Count()>0) {
+                        flag = true;
+                        break;
+                    }
+                }
+                if(flag) ModelState.AddModelError("","Такий автор вже існує");
+            }
+
+            
+
             if (ModelState.IsValid)
             {
                 
                 _context.Add(author);
-                if (countries.Length == 0) 
-                {
-                    AuthorsCountry ac = new AuthorsCountry { AuthorId = author.Id, CountryId = _context.Countries.Where(obj=>obj.Name == "Інтернаціональ").FirstOrDefault().Id };
-                    author.AuthorsCountries.Add(ac);
-                }
+
                 foreach (var cID in countries)
                 {
                     AuthorsCountry ac = new AuthorsCountry { AuthorId = author.Id, CountryId = cID };
@@ -88,8 +97,9 @@ namespace LibraryApplication.Controllers
                 }
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
-
             }
+
+            ViewBag.CountriesList = _context.Countries.ToList();
             return View();
         }
 
@@ -101,24 +111,20 @@ namespace LibraryApplication.Controllers
                 return NotFound();
             }
             var author = await _context.Authors.FindAsync(id);
-            Dictionary<int, string> countries = new Dictionary<int, string>();
-            Dictionary<int, string> otherCountries =  new Dictionary<int, string>();
-            var authorsCountries = thisAuthorCountries(author.Id);
-            foreach (var item in authorsCountries)
-            {
-                    string name = _context.Countries.Where(obj => obj.Id == item.CountryId).FirstOrDefault().Name;
-                    if (name != "Інтернаціональ")
-                    {
-                        countries.Add(item.CountryId, name);
-                    }
-            }
 
-            ViewBag.Countries = countries;
-            foreach (var item in _context.Countries)
+            var thisC = _context.AuthorsCountries.Where(obj => obj.AuthorId == id).Join(_context.Countries, a => a.CountryId, c => c.Id, (a, c) => new
             {
-                if ((!countries.ContainsKey(item.Id)) && item.Name!="Інтернаціональ" ) otherCountries.Add(item.Id, item.Name);
-            }
-            ViewBag.OtherCountries = otherCountries;
+                Id = a.CountryId,
+                Name = c.Name
+            });
+
+            List<string> CNames = new List<string>();
+            foreach (var tC in thisC) CNames.Add(tC.Name);
+
+            ViewBag.OtherCountries = _context.Countries.Where(obj => !CNames.Contains(obj.Name)).ToList();
+          
+            ViewBag.ThisCountries = thisC;
+
             if (author == null)
             {
                 return NotFound();
@@ -138,6 +144,26 @@ namespace LibraryApplication.Controllers
                 return NotFound();
             }
 
+            var IsRepeat = _context.Authors.Where(obj => obj.Id != author.Id && obj.FirstName == author.FirstName && obj.LastName == author.LastName && obj.BirthYear == author.BirthYear);
+            foreach (var item in IsRepeat)
+            {
+                bool flag = false;
+                var IsRepeatCountries = thisAuthorCountries(item.Id);
+                foreach (var c in countries)
+                {
+                    if (IsRepeatCountries.Where(obj => obj.CountryId == c).Count() > 0)
+                    {
+                        flag = true;
+                        break;
+                    }
+                }
+                if (flag)
+                {
+                    ModelState.AddModelError("", "Такий автор вже існує");
+                    break;
+                }
+            }
+
             if (ModelState.IsValid)
             {
                 try
@@ -148,12 +174,7 @@ namespace LibraryApplication.Controllers
                     {
                             _context.AuthorsCountries.Remove(item);
                     }
-                    if (countries.Length == 0)
-                    {
-                        AuthorsCountry ac = new AuthorsCountry { AuthorId = author.Id, CountryId = _context.Countries.Where(obj => obj.Name == "Інтернаціональ").FirstOrDefault().Id };
-                        author.AuthorsCountries.Add(ac);
-                    }
-                    else
+                 
                     {
                         foreach (var cID in countries)
                         {
@@ -176,6 +197,20 @@ namespace LibraryApplication.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
+            var thisC = _context.AuthorsCountries.Where(obj => obj.AuthorId == id).Join(_context.Countries, a => a.CountryId, c => c.Id, (a, c) => new
+            {
+                Id = a.CountryId,
+                Name = c.Name
+            });
+
+            List<string> CNames = new List<string>();
+            foreach (var tC in thisC) CNames.Add(tC.Name);
+
+            ViewBag.OtherCountries = _context.Countries.Where(obj => !CNames.Contains(obj.Name)).ToList();
+
+            ViewBag.ThisCountries = thisC;
+
             return View(author);
         }
 
@@ -189,16 +224,11 @@ namespace LibraryApplication.Controllers
 
             var author = await _context.Authors
                 .FirstOrDefaultAsync(m => m.Id == id);
-            List<string> CNames = new List<string>();
-
-            var authorsCountries = thisAuthorCountries(author.Id);
-            foreach (var item in authorsCountries)
+            
+            ViewBag.CNames = _context.AuthorsCountries.Where(obj => obj.AuthorId == id).Join(_context.Countries, a => a.CountryId, c => c.Id, (a, c) => new
             {
-                    var obj = _context.Countries.Where(obj => obj.Id == item.CountryId).FirstOrDefault().Name;
-                    CNames.Add(obj);
-            }
-
-            ViewBag.CNames = CNames;
+                Name = c.Name
+            });
 
             if (author == null)
             {

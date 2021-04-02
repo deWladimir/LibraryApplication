@@ -1,0 +1,43 @@
+﻿
+@{
+    ViewData["Title"] = "Search";
+}
+<style>
+    .layer1 {
+        background-color: #9ee8c0;
+        padding: 10px;
+    }
+ .layer2 {
+        background-color: #78471011;
+        margin-top: 10px;
+        padding: 20px;
+    }
+
+</style>
+<div class="layer1">
+<h1>Результати пошуку за запитом</h1>
+<h3>"@ViewBag.Query"</h3>
+</div>
+<div class="layer2">
+@if (ViewBag.BNumber != 0)
+{
+    <h2>Книжки:</h2>
+    @foreach (var b in ViewBag.Books)
+    {
+        @Html.ActionLink((string)@b.Name, "Details", "Books", new { id = (int)@b.Id })
+    }
+}
+@if (ViewBag.ANumber != 0)
+{
+    <h2>Автори:</h2>
+    @foreach (var a in ViewBag.Authors)
+    {
+        <a asp-controller="Authors" asp-action="Details" asp-route-id="@a.Id">@a.FirstName @a.LastName</a>
+    }
+}
+
+@if (ViewBag.ANumber == 0 && ViewBag.BNumber == 0)
+{
+    <p style="font-size: 16px">За вашим запитом нічого не знайдено</p>
+}
+</div>

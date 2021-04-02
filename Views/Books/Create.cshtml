@@ -62,7 +62,7 @@
 
             <div class="form-group">
                 <label>Виберіть жанр</label>
-                <select id="genreschoose" multiple name="genres">
+                <select id="genreschoose" multiple name="genres" required>
                     @if (ViewBag.Genres == null)
                     {
                     }
@@ -76,7 +76,7 @@
 
             <div class="form-group">
                 <label>Виберіть автора</label>
-                <select id="authorschoose" multiple name="authors">
+                <select id="authorschoose" multiple name="authors" required>
                     @if (ViewBag.Authors == null)
                     {
                     }
@@ -95,7 +95,7 @@
     </div>
 </div>
 
-<div>
+<div style="margin-bottom:5px">
     <a asp-action="Index">До списку книжок</a>
 </div>
 

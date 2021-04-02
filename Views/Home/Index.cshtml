@@ -1,29 +1,59 @@
 ﻿@{
+    Layout = "_Layout";
     ViewData["Title"] = "Home Page";
 }
 
-<head><link rel="stylesheet" type="text/css" href="~/css/StyleSheet.css" /></head>
 
-<div class="sidenav">
-    <p font-size="25px"><b>Книжки за жанрами</b></p>
-    @foreach (var g in ViewBag.Genres)
-    {
-        <p>@Html.ActionLink((string)@g.Name, "GenreFilter", "Home", new { id = (int)@g.Id })</p>
-    }
-<p font-size="25px"><b>Автори за країною</b></p>
-    @foreach (var c in ViewBag.Countries)
-    {
-<p>@Html.ActionLink((string)@c.Name, "CountryFilter", "Home", new { id = (int)@c.Id })</p>
-    }
+<div class="container">
+    <div id="chart1" style="font-size:14px;"></div>
 </div>
+<div class="container">
+    <div id="chart2" style="font-size:14px;"></div>
+</div>
+@section scripts{
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+        google.charts.load('current', { 'packages': ['corechart'] });
+        google.charts.setOnLoadCallback(drawChart);
 
-<div class="main">
-    <h1>Тимчасовий вигляд сайту</h1>
-    <h2>Нічого унікального</h2>
-    <h3>Це було зроблено менше, ніж за 2 дні</h3>
-    <h4>Далі буде. Нижче наявні книжки</h4>
-    @foreach (var b in ViewBag.Books)
-    {
-        <p>@Html.ActionLink((string)@b.Name, "Details", "Books", new { id = (int)@b.Id })</p>
-    }
-</div>
+        function drawChart() {
+
+            $.get('/api/Charts/GenresData', function (GenresData) {
+                data = google.visualization.arrayToDataTable(GenresData, false);
+                var option = {
+                    title: "Книжки Та Жанри",
+                    width: 500,
+                    height: 400,
+                    is3D: true
+                };
+                chart = new google.visualization.PieChart(document.getElementById('chart1'));
+                chart.draw(data, option);
+            })
+        }
+    </script>
+
+    
+    <script>
+        google.charts.load('current', { 'packages': ['corechart'] });
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+
+            $.get('/api/Charts/AuthorsData', function (AuthorsData) {
+                data = google.visualization.arrayToDataTable(AuthorsData, false);
+                var option = {
+                    title: "Книжки Та Автори",
+                    width: 800,
+                    height: 500,
+                    is3D: true
+                };
+                chart = new google.visualization.ColumnChart(document.getElementById('chart2'));
+                chart.draw(data, option);
+            })
+        }
+    </script>
+}
+
+
+
+

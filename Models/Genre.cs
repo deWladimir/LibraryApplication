@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using LibraryApplication.Validators;
 
 #nullable disable
-
 namespace LibraryApplication
 {
+    [GenreValidator(ErrorMessage = "Такий жанр вже існує")]
     public partial class Genre
     {
         public Genre()

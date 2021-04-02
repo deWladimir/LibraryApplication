@@ -50,19 +50,15 @@
             <div class="form-group">
 
                 <label>Змінити список країн</label>
-                <select id="countrieschoose" multiple name="countries">
-                    @if (ViewBag.CountriesList == null)
+                <select id="countrieschoose" multiple name="countries" required>
+                    @foreach (var c in ViewBag.ThisCountries)
                     {
-                    }
-                    @foreach (var c in ViewBag.Countries)
-                    {
-                        <option value=@c.Key selected="selected">@c.Value</option>
+                        <option value=@c.GetType().GetProperty("Id").GetValue(c, null) selected="selected">@c.GetType().GetProperty("Name").GetValue(c, null)</option>
                     }
                     @foreach (var item in ViewBag.OtherCountries)
                     {
-                        <option value=@item.Key>@item.Value</option>
+                        <option value=@item.Id>@item.Name</option>
                     }
-
                 </select>
             </div>
             <div class="form-group">

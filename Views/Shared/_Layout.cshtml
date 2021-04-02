@@ -1,14 +1,28 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - LibraryApplication</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/StyleSheet.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" integrity="sha512-nMNlpuaDPrqlEls3IX/Q56H36qvBASwb3ipuo3MxeWbsQB1881ox0cRv7UPTgBlriqoynt35KjEwgGUeUXIPnw==" crossorigin="anonymous" />
 </head>
 <body>
+    <div class="sidenav">
+        <h2 style="margin: 0.1em 0 0.1em 0.1em; color: #343434; font-size: 20px; font-weight: normal; text-transform: uppercase; font-family: 'Orienta', sans-serif; letter-spacing: 1px;">Книжки за жанрами</h2>
+        @foreach (var g in DataForFixedBar.Genres)
+        {
+            <a asp-area="" asp-controller="Home" asp-action="GenreFilter" asp-route-id="@g.Id">@g.Name</a>
+        }
+        <h2 style="margin: 0.15em 0 0.1em 0.1em; color: #343434; font-size: 20px; font-weight: normal; text-transform: uppercase; font-family: 'Orienta', sans-serif; letter-spacing: 1px;">Автори за країною</h2>
+        @foreach (var c in DataForFixedBar.Countries)
+        {
+            <a asp-area="" asp-controller="Home" asp-action="CountryFilter" asp-route-id="@c.Id">@c.Name</a>
+        }
+    </div>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
@@ -17,7 +31,7 @@
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <div class="navbar-collapse">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="Index">Книжки</a>
@@ -32,19 +46,23 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Countries" asp-action="Index">Країни</a>
                         </li>
                     </ul>
+                    <form class="form-inline my-2 my-lg-0 mr-0" asp-controller="Home" asp-action="Search" method="post">
+                        <input class="form-control mr-sm-2" name="query" type="text" placeholder="За автором або назвою книги" aria-label="Search" required>
+                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Пошук</button>
+                    </form>
                 </div>
             </div>
         </nav>
     </header>
     <div class="container">
-        <main role="main" class="pb-3">
+        <main role="main" class="main">
             @RenderBody()
         </main>
-    </div>
+            </div>
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2021 - LibraryApplication - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2021 - НеБібліотека
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

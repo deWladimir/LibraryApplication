@@ -35,9 +35,7 @@
         </thead>
         <tbody>
             @foreach (var item in Model)
-            {
-                if (item.Name != "Інтернаціональ")
-                {
+            {               
                     <tr>
                         <td>
                             @Html.ActionLink((string)@item.Name, "Details","Countries", new { id = (int)@item.Id }, null)
@@ -46,21 +44,6 @@
                             <a asp-action="Edit" asp-route-id="@item.Id">Редагувати</a>
                         </td>
                     </tr>
-
-                }
-
-                if (item.Name == "Інтернаціональ")
-                {
-                    <tr>
-                        <td>
-                            @Html.ActionLink((string)@item.Name, "Details", "Countries", new { id = (int)@item.Id }, null)
-                        </td>
-                        <td>
-                            <a asp-action="Details" asp-route-id="@item.Id">Інтернаціональні автори</a>
-                        </td>
-                    </tr>
-
-                }
             }
         </tbody>
     </table>

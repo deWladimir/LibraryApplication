@@ -35,23 +35,17 @@ namespace LibraryApplication.Controllers
             var book = await _context.Books
                 .FirstOrDefaultAsync(m => m.Id == id);
 
-            var genresBooks = _context.GenresBooks.Where(obj => obj.BookId == book.Id);
-            Dictionary<int, string> thisGenres = new Dictionary<int, string>();
-            foreach (var g in genresBooks)
+            ViewBag.ThisGenres = _context.GenresBooks.Where(obj=> obj.BookId == id).Join(_context.Genres, b => b.GenreId, g => g.Id, (b,g) => new 
             {
-                thisGenres.Add(g.GenreId, _context.Genres.Where(obj => obj.Id == g.GenreId).FirstOrDefault().Name);
-            }
-            ViewBag.ThisGenres = thisGenres;
+                Id = b.GenreId,
+                Name = g.Name
+            });
 
-            var authorsBooks = _context.AuthorsBooks.Where(obj => obj.BookId == book.Id);
-            Dictionary<int, string> thisAuthors = new Dictionary<int, string>();
-            foreach (var a in authorsBooks)
+            ViewBag.ThisAuthors = _context.AuthorsBooks.Where(obj=>obj.BookId==id).Join(_context.Authors, b=>b.AuthorId, a => a.Id, (b, a) => new
             {
-                var author = _context.Authors.Where(obj => obj.Id == a.AuthorId).FirstOrDefault();
-                string fullName = author.FirstName + " " + author.LastName;
-                thisAuthors.Add(a.AuthorId, fullName);
-            }
-            ViewBag.ThisAuthors = thisAuthors;
+                Id = b.AuthorId,
+                FullName = a.FirstName + " " + a.LastName
+            });
 
             if (book == null)
             {
@@ -64,8 +58,8 @@ namespace LibraryApplication.Controllers
         // GET: Books/Create
         public IActionResult Create()
         {
-            ViewBag.Genres = _context.Genres.Where(obj=>obj.Name!="Без жанру").ToList();
-            ViewBag.Authors = _context.Authors.Where(obj=>obj.LastName!="Невідомий" && obj.FirstName!="Автор").ToList();
+            ViewBag.Genres = _context.Genres.ToList();
+            ViewBag.Authors = _context.Authors.ToList();
             return View();
         }
 
@@ -76,42 +70,46 @@ namespace LibraryApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Info,Fb2,Pdf,PagesQuantity,Picture")] Book book, int[] genres, int[] authors)
         {
+            var AreRepeats = _context.Books.Where(obj => obj.Name == book.Name && obj.PagesQuantity == book.PagesQuantity);
+            foreach (var a in AreRepeats)
+            {
+                bool flag = false;
+                var aBooks = _context.AuthorsBooks.Where(obj => obj.BookId == a.Id);
+                foreach (var author in authors)
+                {
+                    if (aBooks.Where(obj => obj.AuthorId == author).Count() > 0) flag = true;
+                    break;
+                }
+                if (flag)
+                {
+                    ModelState.AddModelError("", "Така книга вже існує");
+                    break;
+                }
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Add(book);
-                if (genres.Length == 0)
-                {
-                    GenresBook gb = new GenresBook { BookId = book.Id, GenreId = _context.Genres.Where(obj => obj.Name == "Без жанру").FirstOrDefault().Id };
-                    book.GenresBooks.Add(gb);
-                }
-
-                else
-                {
+               
                     foreach (int GId in genres)
                     {
                         GenresBook gb = new GenresBook { GenreId = GId, BookId = book.Id };
                         book.GenresBooks.Add(gb);
                     }
-                }
+                
 
-
-                if (authors.Length == 0)
-                {
-                    AuthorsBook ab = new AuthorsBook { BookId = book.Id, AuthorId = _context.Authors.Where(obj => obj.FirstName == "Автор" && obj.LastName == "Невідомий").FirstOrDefault().Id };
-                    book.AuthorsBooks.Add(ab);
-                }
-
-                else
-                {
                     foreach (int AId in authors)
                     {
                         AuthorsBook ab = new AuthorsBook { AuthorId = AId, BookId = book.Id };
                         book.AuthorsBooks.Add(ab);
                     }
-                }
+                
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
+            ViewBag.Genres = _context.Genres.ToList();
+            ViewBag.Authors = _context.Authors.ToList();
             return View(book);
         }
 
@@ -125,45 +123,29 @@ namespace LibraryApplication.Controllers
 
             var book = await _context.Books.FindAsync(id);
 
-            Dictionary<int, string> thisGenres = new Dictionary<int, string>();
-            Dictionary<int, string> otherGenres = new Dictionary<int, string>();
-            foreach(var item in _context.GenresBooks)
+            var thisGenres = _context.GenresBooks.Where(obj => obj.BookId == id).Join(_context.Genres, b => b.GenreId, g => g.Id, (b, g) => new
             {
-                if (item.BookId == book.Id)
-                {
-                    string genre = _context.Genres.Where(obj => obj.Id == item.GenreId).FirstOrDefault().Name;
-                    if (genre != "Без жанру") thisGenres.Add(item.GenreId, genre);
-                }
-            }
+                   Id = b.GenreId,
+                Name = g.Name
+            });
 
-            foreach (var item in _context.Genres)
-            {
-                if ((!thisGenres.ContainsKey(item.Id)) && item.Name != "Без жанру") otherGenres.Add(item.Id, item.Name);
-            }
+            List<string> thisNames = new List<string>();
+            foreach (var g in thisGenres) thisNames.Add(g.Name);
 
             ViewBag.ThisGenres = thisGenres;
-            ViewBag.OtherGenres = otherGenres;
+            ViewBag.OtherGenres = _context.Genres.Where(obj=>!thisNames.Contains(obj.Name)).ToList();
 
-            Dictionary<int, string> thisAuthors = new Dictionary<int, string>();
-            Dictionary<int, string> otherAuthors = new Dictionary<int, string>();
-
-            foreach (var item in _context.AuthorsBooks)
+            var thisAuthors = _context.AuthorsBooks.Where(obj => obj.BookId == id).Join(_context.Authors, b => b.AuthorId, a => a.Id, (b, a) => new
             {
-                if (item.BookId == book.Id)
-                {
-                    string firstName = _context.Authors.Where(obj => obj.Id == item.AuthorId).FirstOrDefault().FirstName;
-                    string lastName = _context.Authors.Where(obj => obj.Id == item.AuthorId).FirstOrDefault().LastName;
-                    if (firstName != "Автор" && lastName!="Невідомий") thisAuthors.Add(item.AuthorId, firstName + " " + lastName);
-                }
-            }
+                Id = b.AuthorId,
+                FullName = a.FirstName + " " + a.LastName
+            });
 
-            foreach (var item in _context.Authors)
-            {
-                if ((!thisAuthors.ContainsKey(item.Id)) && item.FirstName != "Автор" && item.LastName != "Невідомий") otherAuthors.Add(item.Id, item.FirstName + " " + item.LastName);
-            }
+            List<string> thisFullNames = new List<string>();
+            foreach (var a in thisAuthors) thisFullNames.Add(a.FullName);
 
             ViewBag.ThisAuthors = thisAuthors;
-            ViewBag.OtherAuthors = otherAuthors;
+            ViewBag.OtherAuthors = _context.Authors.Where(obj=>!thisFullNames.Contains(obj.FirstName + " " + obj.LastName)).ToList();
 
             if (book == null)
             {
@@ -184,6 +166,23 @@ namespace LibraryApplication.Controllers
                 return NotFound();
             }
 
+            var AreRepeats = _context.Books.Where(obj => obj.Id!=book.Id && obj.Name == book.Name && obj.PagesQuantity == book.PagesQuantity);
+            foreach (var a in AreRepeats)
+            {
+                bool flag = false;
+                var aBooks = _context.AuthorsBooks.Where(obj => obj.BookId == a.Id);
+                foreach (var author in authors)
+                {
+                    if (aBooks.Where(obj => obj.AuthorId == author).Count() > 0) flag = true;
+                    break;
+                }
+                if (flag)
+                {
+                    ModelState.AddModelError("", "Така книга вже існує");
+                    break;
+                }
+            }
+
             if (ModelState.IsValid)
             {
                 try
@@ -197,35 +196,20 @@ namespace LibraryApplication.Controllers
                     {
                         if (item.BookId == book.Id) _context.AuthorsBooks.Remove(item);
                     }
-                    if(genres.Length==0)
-                    {
-                        GenresBook gb = new GenresBook { BookId = book.Id, GenreId = _context.Genres.Where(obj => obj.Name == "Без жанру").FirstOrDefault().Id };
-                        book.GenresBooks.Add(gb);
-                    }
-                    else
-                    {
+                    
                         foreach (int GId in genres)
                         {
                             GenresBook gb = new GenresBook { GenreId = GId, BookId = book.Id };
                             book.GenresBooks.Add(gb);
                         }
-                    }
 
-
-                    if (authors.Length == 0)
-                    {
-                        AuthorsBook ab = new AuthorsBook { BookId = book.Id, AuthorId = _context.Authors.Where(obj => obj.FirstName == "Автор" && obj.LastName == "Невідомий").FirstOrDefault().Id };
-                        book.AuthorsBooks.Add(ab);
-                    }
-
-                    else
-                    {
+                    
                         foreach (int AId in authors)
                         {
                             AuthorsBook ab = new AuthorsBook { AuthorId = AId, BookId = book.Id };
                             book.AuthorsBooks.Add(ab);
                         }
-                    }
+                    
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -241,6 +225,30 @@ namespace LibraryApplication.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
+            var thisGenres = _context.GenresBooks.Where(obj => obj.BookId == id).Join(_context.Genres, b => b.GenreId, g => g.Id, (b, g) => new
+            {
+                Id = b.GenreId,
+                Name = g.Name
+            });
+
+            List<string> thisNames = new List<string>();
+            foreach (var g in thisGenres) thisNames.Add(g.Name);
+
+            ViewBag.ThisGenres = thisGenres;
+            ViewBag.OtherGenres = _context.Genres.Where(obj => !thisNames.Contains(obj.Name)).ToList();
+
+            var thisAuthors = _context.AuthorsBooks.Where(obj => obj.BookId == id).Join(_context.Authors, b => b.AuthorId, a => a.Id, (b, a) => new
+            {
+                Id = b.AuthorId,
+                FullName = a.FirstName + " " + a.LastName
+            });
+
+            List<string> thisFullNames = new List<string>();
+            foreach (var a in thisAuthors) thisFullNames.Add(a.FullName);
+
+            ViewBag.ThisAuthors = thisAuthors;
+            ViewBag.OtherAuthors = _context.Authors.Where(obj => !thisFullNames.Contains(obj.FirstName + " " + obj.LastName)).ToList();
             return View(book);
         }
 
@@ -255,28 +263,15 @@ namespace LibraryApplication.Controllers
             var book = await _context.Books
                 .FirstOrDefaultAsync(m => m.Id == id);
 
-            Dictionary<int, string> thisGenres = new Dictionary<int, string>();
-            foreach (var item in _context.GenresBooks)
+            ViewBag.ThisGenres = _context.GenresBooks.Where(obj => obj.BookId == id).Join(_context.Genres, b => b.GenreId, g => g.Id, (b, g) => new
             {
-                if (item.BookId == book.Id)
-                {
-                    string genre = _context.Genres.Where(obj => obj.Id == item.GenreId).FirstOrDefault().Name;
-                    thisGenres.Add(item.GenreId, genre);
-                }
-            }
-            ViewBag.ThisGenres = thisGenres;
+                Name = g.Name
+            });
 
-            Dictionary<int, string> thisAuthors = new Dictionary<int, string>();
-            foreach (var item in _context.AuthorsBooks)
+            ViewBag.ThisAuthors = _context.AuthorsBooks.Where(obj => obj.BookId == id).Join(_context.Authors, b => b.AuthorId, a => a.Id, (b, a) => new
             {
-                if (item.BookId == book.Id)
-                {
-                    string firstName = _context.Authors.Where(obj => obj.Id == item.AuthorId).FirstOrDefault().FirstName;
-                    string lastName = _context.Authors.Where(obj => obj.Id == item.AuthorId).FirstOrDefault().LastName;
-                    thisAuthors.Add(item.AuthorId, firstName + " " + lastName);
-                }
-            }
-            ViewBag.ThisAuthors = thisAuthors;
+                FullName = a.FirstName + " " + a.LastName
+            });
 
             if (book == null)
             {

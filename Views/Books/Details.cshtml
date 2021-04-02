@@ -18,7 +18,7 @@
     }
     </style>
 
-<div align="center">
+<div text-align="center">
 <h1>@Model.Name</h1>
 </div>
 <div align="left">
@@ -30,7 +30,7 @@
              <ul><b>Автори:</b>
     @foreach (var i in ViewBag.ThisAuthors)
     {
-<li>@Html.ActionLink((string)@i.Value, "Details", "Authors", new { id = (int)@i.Key }, null)</li>
+<li>@Html.ActionLink((string)@i.GetType().GetProperty("FullName").GetValue(i, null), "Details", "Authors", new { id = (int)@i.GetType().GetProperty("Id").GetValue(i, null) }, null)</li>
                  }
              </ul>
              <h2>@Html.DisplayNameFor(model => model.Info)</h2>
@@ -38,7 +38,7 @@
                     <ul><b>Жанри:</b>
                         @foreach (var item in ViewBag.ThisGenres)
                         {
-                            <li>@Html.ActionLink((string)@item.Value, "Details", "Genres", new { id = (int)@item.Key }, null)</li>
+                            <li>@Html.ActionLink((string)@item.GetType().GetProperty("Name").GetValue(item, null), "Details", "Genres", new { id = (int)@item.GetType().GetProperty("Id").GetValue(item, null) }, null)</li>
                         }
                     </ul>
          </div></div> 

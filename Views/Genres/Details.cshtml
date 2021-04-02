@@ -26,6 +26,6 @@
         <ul><b>Книжки за цим жанром:</b>
             @foreach (var item in ViewBag.ThisBooks)
             {
-                <li>@Html.ActionLink((string)@item.Value, "Details", "Books", new { id = (int)@item.Key}, null)</li>
+                <li>@Html.ActionLink((string)@item.GetType().GetProperty("Name").GetValue(item, null), "Details", "Books", new { id = (int)@item.GetType().GetProperty("Id").GetValue(item, null)}, null)</li>
             }</ul>
         </div></div>

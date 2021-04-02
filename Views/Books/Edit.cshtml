@@ -60,38 +60,38 @@
                 <input asp-for="Picture" class="form-control" placeholder="/css/covers/ім’я_файлу" title="/css/covers/ім’я_файлу"  />
                 <span asp-validation-for="Picture" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div>
 
                 <label>Змінити список жанрів</label>
-                <select id="genreschoose" multiple name="genres">
+                <select id="genreschoose" multiple name="genres" required>
                     @if (ViewBag.ThisGenres == null || ViewBag.OtherGenres == null)
                     {
                     }
                     @foreach (var g in ViewBag.ThisGenres)
                     {
-                        <option value=@g.Key selected="selected">@g.Value</option>
+                        <option value=@g.GetType().GetProperty("Id").GetValue(g,null) selected="selected">@g.GetType().GetProperty("Name").GetValue(g, null)</option>
                     }
                     @foreach (var item in ViewBag.OtherGenres)
                     {
-                        <option value=@item.Key>@item.Value</option>
+                        <option value=@item.Id>@item.Name</option>
                     }
 
                 </select>
             </div>
-            <div class="form-group">
+            <div>
 
                 <label>Змінити список авторів</label>
-                <select id="authorschoose" multiple name="authors">
+                <select id="authorschoose" multiple name="authors" required>
                     @if (ViewBag.ThisAuthors == null || ViewBag.OtherAuthors == null)
                     {
                     }
                     @foreach (var a in ViewBag.ThisAuthors)
                     {
-                        <option value=@a.Key selected="selected">@a.Value</option>
+                        <option value=@a.GetType().GetProperty("Id").GetValue(a,null) selected="selected">@a.GetType().GetProperty("FullName").GetValue(a, null)</option>
                     }
                     @foreach (var item in ViewBag.OtherAuthors)
                     {
-                        <option value=@item.Key>@item.Value</option>
+                        <option value=@item.Id>@item.FirstName @item.LastName</option>
                     }
 
                 </select>

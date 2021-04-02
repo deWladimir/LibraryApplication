@@ -12,39 +12,45 @@
 }
 
     /* The navigation menu links */
-    .sidenav a {
-        padding: 6px 8px 6px 16px;
-        text-decoration: none;
-        font-size: 20px;
-        color: #0a090a;
-        display: block;
-    }
-
+ 
+.sidenav a {
+    font-family: Verdana, 'Book Antiqua', Georgia, serif;
+    color: #020201;
+    text-decoration: underline;
+    line-height: 123.07692307692307692307692307692%;
+    font-size: 14px;
+    display: block;
+    padding: 2px;
+}
+    
         /* When you mouse over the navigation links, change their color */
         .sidenav a:hover {
             color: #f1f1f1;
         }
 
+
+
+
 /* Style page content */
 .main {
     margin-left: 250px; /* Same as the width of the sidebar */
-    padding: 0px 10px;
-    font-size: 20px;
+    padding: 3em;
+    font-size: 16px;
     text-align: center;
     vertical-align: middle;
 }
 
-p{
+.main p{
     margin-top:0.1em;
     margin-bottom:0.1em;
 }
 
-li {
+.main li {
     list-style-type: none;
     text-align: center;
 }
 
-.main h1 {
+ h1 {
     margin: 1em 0 0.5em 0;
     color: #343434;
     font-weight: normal;
@@ -55,3 +61,8 @@ li {
     text-shadow: 0 2px white, 0 3px #777;
     text-align: center;
 }
+
+.main h2 {
+    color: #000080;
+}
+

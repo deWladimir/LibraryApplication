@@ -50,15 +50,11 @@
             <div class="form-group">
 
                 <label>Виберіть країну</label>
-                <select id="countrieschoose" multiple name="countries" >
-                    @if (ViewBag.CountriesList == null)
-                    {
-                    }
-                    @foreach (var item in ViewBag.CountriesList)
-                    {
+                <select id="countrieschoose" multiple name="countries" required>
+                   @foreach (var item in ViewBag.CountriesList)
+                   {
                         <option value=@item.Id>@item.Name</option>
-                    }
-                    
+                   }
                 </select>            
             </div>
             <div class="form-group">
