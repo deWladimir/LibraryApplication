@@ -16,7 +16,6 @@
 .sidenav a {
     font-family: Verdana, 'Book Antiqua', Georgia, serif;
     color: #020201;
-    text-decoration: underline;
     line-height: 123.07692307692307692307692307692%;
     font-size: 14px;
     display: block;
@@ -34,7 +33,7 @@
 /* Style page content */
 .main {
     margin-left: 250px; /* Same as the width of the sidebar */
-    padding: 3em;
+    padding: 1em;
     font-size: 16px;
     text-align: center;
     vertical-align: middle;
@@ -51,7 +50,7 @@
 }
 
  h1 {
-    margin: 1em 0 0.5em 0;
+    margin: 0.5em 0 0.5em 0;
     color: #343434;
     font-weight: normal;
     font-family: 'Ultra', sans-serif;

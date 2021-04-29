@@ -13,15 +13,7 @@
 <body>
     <div class="sidenav">
         <h2 style="margin: 0.1em 0 0.1em 0.1em; color: #343434; font-size: 20px; font-weight: normal; text-transform: uppercase; font-family: 'Orienta', sans-serif; letter-spacing: 1px;">Книжки за жанрами</h2>
-        @foreach (var g in DataForFixedBar.Genres)
-        {
-            <a asp-area="" asp-controller="Home" asp-action="GenreFilter" asp-route-id="@g.Id">@g.Name</a>
-        }
-        <h2 style="margin: 0.15em 0 0.1em 0.1em; color: #343434; font-size: 20px; font-weight: normal; text-transform: uppercase; font-family: 'Orienta', sans-serif; letter-spacing: 1px;">Автори за країною</h2>
-        @foreach (var c in DataForFixedBar.Countries)
-        {
-            <a asp-area="" asp-controller="Home" asp-action="CountryFilter" asp-route-id="@c.Id">@c.Name</a>
-        }
+        @RenderSection("FixedBar")
     </div>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
@@ -47,7 +39,7 @@
                         </li>
                     </ul>
                     <form class="form-inline my-2 my-lg-0 mr-0" asp-controller="Home" asp-action="Search" method="post">
-                        <input class="form-control mr-sm-2" name="query" type="text" placeholder="За автором або назвою книги" aria-label="Search" required>
+                        <input id="querySearch" class="form-control mr-sm-2" name="query" type="text" placeholder="За автором або назвою книги" aria-label="Search" required>
                         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Пошук</button>
                     </form>
                 </div>
@@ -58,7 +50,7 @@
         <main role="main" class="main">
             @RenderBody()
         </main>
-            </div>
+    </div>
 
     <footer class="border-top footer text-muted">
         <div class="container">

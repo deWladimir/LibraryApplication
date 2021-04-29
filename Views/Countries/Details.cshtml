@@ -3,7 +3,17 @@
 @{
     ViewData["Title"] = "Details";
 }
-
+@section FixedBar{
+    @foreach (var g in DataForFixedBar.Genres)
+    {
+        <a asp-area="" asp-controller="Home" asp-action="GenreFilter" asp-route-id="@g.Id">@g.Name</a>
+    }
+    <h2 style="margin: 0.15em 0 0.1em 0.1em; color: #343434; font-size: 20px; font-weight: normal; text-transform: uppercase; font-family: 'Orienta', sans-serif; letter-spacing: 1px;">Автори за країною</h2>
+    @foreach (var c in DataForFixedBar.Countries)
+    {
+        <a asp-area="" asp-controller="Home" asp-action="CountryFilter" asp-route-id="@c.Id">@c.Name</a>
+    }
+}
 <style>
     .layer1 {
         background-color: #d9c83011;
@@ -15,6 +25,7 @@
         margin-top: 10px;
         padding: 20px;
     }
+
     li {
         list-style-type: none;
     }
@@ -24,13 +35,14 @@
     <h1>@Model.Name</h1>
 </div>
 <div class="layer2">
-    <ul><b>Автори з цієї держави:</b>
+    <ul>
+        <b>Автори з цієї держави:</b>
         @foreach (var item in ViewBag.ThisAuthors)
         {
             <li>
                 @Html.ActionLink((string)@item.GetType().GetProperty("FullName").GetValue(item, null), "Details", "Authors", new { id = (int)@item.GetType().GetProperty("Id").GetValue(item, null) }, null)
-                </li>
-            }
+            </li>
+        }
     </ul>
 </div>
 

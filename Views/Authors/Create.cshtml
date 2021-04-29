@@ -3,7 +3,17 @@
 @{
     ViewData["Title"] = "Create";
 }
-
+@section FixedBar{
+    @foreach (var g in DataForFixedBar.Genres)
+    {
+        <a asp-area="" asp-controller="Home" asp-action="GenreFilter" asp-route-id="@g.Id">@g.Name</a>
+    }
+    <h2 style="margin: 0.15em 0 0.1em 0.1em; color: #343434; font-size: 20px; font-weight: normal; text-transform: uppercase; font-family: 'Orienta', sans-serif; letter-spacing: 1px;">Автори за країною</h2>
+    @foreach (var c in DataForFixedBar.Countries)
+    {
+        <a asp-area="" asp-controller="Home" asp-action="CountryFilter" asp-route-id="@c.Id">@c.Name</a>
+    }
+}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js" integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A==" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" integrity="sha512-nMNlpuaDPrqlEls3IX/Q56H36qvBASwb3ipuo3MxeWbsQB1881ox0cRv7UPTgBlriqoynt35KjEwgGUeUXIPnw==" crossorigin="anonymous" />
@@ -51,11 +61,11 @@
 
                 <label>Виберіть країну</label>
                 <select id="countrieschoose" multiple name="countries" required>
-                   @foreach (var item in ViewBag.CountriesList)
-                   {
+                    @foreach (var item in ViewBag.CountriesList)
+                    {
                         <option value=@item.Id>@item.Name</option>
-                   }
-                </select>            
+                    }
+                </select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

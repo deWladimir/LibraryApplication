@@ -3,7 +3,17 @@
 @{
     ViewData["Title"] = "Delete";
 }
-
+@section FixedBar{
+    @foreach (var g in DataForFixedBar.Genres)
+    {
+        <a asp-area="" asp-controller="Home" asp-action="GenreFilter" asp-route-id="@g.Id">@g.Name</a>
+    }
+    <h2 style="margin: 0.15em 0 0.1em 0.1em; color: #343434; font-size: 20px; font-weight: normal; text-transform: uppercase; font-family: 'Orienta', sans-serif; letter-spacing: 1px;">Автори за країною</h2>
+    @foreach (var c in DataForFixedBar.Countries)
+    {
+        <a asp-area="" asp-controller="Home" asp-action="CountryFilter" asp-route-id="@c.Id">@c.Name</a>
+    }
+}
 <h1>Видалити</h1>
 
 <h3>Ви впевнені?</h3>
@@ -53,12 +63,12 @@
             <ul>
                 @foreach (var a in ViewBag.ThisAuthors)
                 {
-                <li>@a.GetType().GetProperty("FullName").GetValue(a, null)</li>
+                    <li>@a.GetType().GetProperty("FullName").GetValue(a, null)</li>
                 }
             </ul>
         </dd>
     </dl>
-    
+
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |

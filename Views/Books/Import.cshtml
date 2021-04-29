@@ -1,0 +1,89 @@
+﻿
+@{
+    ViewData["Title"] = "Import";
+}
+
+@section FixedBar{
+    @foreach (var g in DataForFixedBar.Genres)
+    {
+        <a asp-area="" asp-controller="Home" asp-action="GenreFilter" asp-route-id="@g.Id">@g.Name</a>
+    }
+    <h2 style="margin: 0.15em 0 0.1em 0.1em; color: #343434; font-size: 20px; font-weight: normal; text-transform: uppercase; font-family: 'Orienta', sans-serif; letter-spacing: 1px;">Автори за країною</h2>
+    @foreach (var c in DataForFixedBar.Countries)
+    {
+        <a asp-area="" asp-controller="Home" asp-action="CountryFilter" asp-route-id="@c.Id">@c.Name</a>
+    }
+}
+<style>
+    .layer1 {
+        background-color: #9ee8c0;
+        padding: 10px;
+    }
+
+    .layer2 {
+        background-color: #408fbd11;
+        margin-top: 10px;
+        padding: 20px;
+    }
+
+    li {
+        list-style-type: none;
+    }
+</style>
+<h1>Зміни були успішно внесені!</h1>
+@if (ViewBag.MissingAuthors != null && ViewBag.MissingAuthors.Count > 0)
+{
+    <div class="layer1">
+        <h2>Ви хотіли додати книжки автора, якого ще немає в базі даних. Спочатку додайте цих авторів.</h2>
+        <ul>
+            @foreach (string author in ViewBag.MissingAuthors)
+            {
+                <li>@author</li>
+            }
+        </ul>
+    </div>
+}
+@if (ViewBag.UnvalidPath != null && ViewBag.UnvalidPath.Count > 0)
+{
+    <div class="layer2">
+        <h2>Наступні книжки не були додані через некоректний шлях до файлу</h2>
+        <ul>
+            @foreach (string book in ViewBag.UnvalidPath)
+            {
+                <li>@book</li>
+            }
+        </ul>
+    </div>
+}
+@if (ViewBag.PagesChanged != null && ViewBag.PagesChanged.Count > 0)
+{
+    <div class="layer1">
+        <h2>В наступних книжках була встановлена кількість сторінок за замовчуванням. Змініть її</h2>
+        <ul>
+            @foreach (string book in ViewBag.PagesChanged)
+            {
+                <li>@book</li>
+            }
+        </ul>
+    </div>
+}
+@if (ViewBag.Doubles != null && ViewBag.Doubles.Count > 0)
+{
+    <div class="layer2">
+        <h2>Наступні книжки не були додані, бо вони, ймовірно, вже є</h2>
+        <h4>Одна з їх файлових адрес дублює вже існуючу або у вказаного автора вже є така книжка</h4>
+        <ul>
+            @foreach (string book in ViewBag.Doubles)
+            {
+                <li>@book</li>
+            }
+        </ul>
+    </div>
+}
+@if (ViewBag.NameProblem.Length > 0)
+{
+    <div class="layer2">
+        <h2>@ViewBag.NameProblem</h2>
+        </div>
+}
+    @Html.ActionLink("До списку книжок", "Index", "Books")

@@ -20,7 +20,17 @@
     }
     );
 </script>
-
+@section FixedBar{
+    @foreach (var g in DataForFixedBar.Genres)
+    {
+        <a asp-area="" asp-controller="Home" asp-action="GenreFilter" asp-route-id="@g.Id">@g.Name</a>
+    }
+    <h2 style="margin: 0.15em 0 0.1em 0.1em; color: #343434; font-size: 20px; font-weight: normal; text-transform: uppercase; font-family: 'Orienta', sans-serif; letter-spacing: 1px;">Автори за країною</h2>
+    @foreach (var c in DataForFixedBar.Countries)
+    {
+        <a asp-area="" asp-controller="Home" asp-action="CountryFilter" asp-route-id="@c.Id">@c.Name</a>
+    }
+}
 <h1>Внести зміни</h1>
 
 <h4>Книжка</h4>
@@ -57,7 +67,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Picture" class="control-label"></label>
-                <input asp-for="Picture" class="form-control" placeholder="/css/covers/ім’я_файлу" title="/css/covers/ім’я_файлу"  />
+                <input asp-for="Picture" class="form-control" placeholder="/css/covers/ім’я_файлу" title="/css/covers/ім’я_файлу" />
                 <span asp-validation-for="Picture" class="text-danger"></span>
             </div>
             <div>

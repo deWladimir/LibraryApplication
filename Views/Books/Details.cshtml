@@ -3,46 +3,62 @@
 @{
     ViewData["Title"] = "Details";
 }
-
+@section FixedBar{
+    @foreach (var g in DataForFixedBar.Genres)
+    {
+        <a asp-area="" asp-controller="Home" asp-action="GenreFilter" asp-route-id="@g.Id">@g.Name</a>
+    }
+    <h2 style="margin: 0.15em 0 0.1em 0.1em; color: #343434; font-size: 20px; font-weight: normal; text-transform: uppercase; font-family: 'Orienta', sans-serif; letter-spacing: 1px;">Автори за країною</h2>
+    @foreach (var c in DataForFixedBar.Countries)
+    {
+        <a asp-area="" asp-controller="Home" asp-action="CountryFilter" asp-route-id="@c.Id">@c.Name</a>
+    }
+}
 <style>
     .layer1 {
         background-color: #9ee8c0;
         padding: 10px;
     }
+
     .layer2 {
         margin-left: 20px;
         background-color: #18999011;
     }
+
     li {
         list-style-type: none;
     }
-    </style>
+</style>
 
 <div text-align="center">
-<h1>@Model.Name</h1>
+    <h1>@Model.Name</h1>
 </div>
 <div align="left">
-    <p>@Model.Name, @Model.PagesQuantity сторінок <a href="@Model.Pdf" target="_blank">(Читати)|</a><a asp-action="Download" asp-route-id="@Model.Id">(Завантажити)</a></p>    
+    <p>@Model.Name, @Model.PagesQuantity сторінок <a href="@Model.Pdf" target="_blank">(Читати)|</a><a asp-action="Download" asp-route-id="@Model.Id">(Завантажити)</a></p>
 </div>
 <div>
-    <div><img src="@Model.Picture" align="left" class="layer1" height="390" width="264">
-         <div class="layer2">
-             <ul><b>Автори:</b>
-    @foreach (var i in ViewBag.ThisAuthors)
-    {
-<li>@Html.ActionLink((string)@i.GetType().GetProperty("FullName").GetValue(i, null), "Details", "Authors", new { id = (int)@i.GetType().GetProperty("Id").GetValue(i, null) }, null)</li>
-                 }
-             </ul>
-             <h2>@Html.DisplayNameFor(model => model.Info)</h2>
-             <p>@Model.Info</p>
-                    <ul><b>Жанри:</b>
-                        @foreach (var item in ViewBag.ThisGenres)
-                        {
-                            <li>@Html.ActionLink((string)@item.GetType().GetProperty("Name").GetValue(item, null), "Details", "Genres", new { id = (int)@item.GetType().GetProperty("Id").GetValue(item, null) }, null)</li>
-                        }
-                    </ul>
-         </div></div> 
+    <div>
+        <img src="@Model.Picture" align="left" class="layer1" height="390" width="264">
+        <div class="layer2">
+            <ul>
+                <b>Автори:</b>
+                @foreach (var i in ViewBag.ThisAuthors)
+                {
+                    <li>@Html.ActionLink((string)@i.GetType().GetProperty("FullName").GetValue(i, null), "Details", "Authors", new { id = (int)@i.GetType().GetProperty("Id").GetValue(i, null) }, null)</li>
+                }
+            </ul>
+            <h2>@Html.DisplayNameFor(model => model.Info)</h2>
+            <p>@Model.Info</p>
+            <ul>
+                <b>Жанри:</b>
+                @foreach (var item in ViewBag.ThisGenres)
+                {
+                    <li>@Html.ActionLink((string)@item.GetType().GetProperty("Name").GetValue(item, null), "Details", "Genres", new { id = (int)@item.GetType().GetProperty("Id").GetValue(item, null) }, null)</li>
+                }
+            </ul>
+        </div>
     </div>
+</div>
 
 <div>
     <a asp-action="Index">До списку книжок</a>

@@ -16,25 +16,36 @@
         padding: 20px;
     }
 </style>
-
-<div class="layer1" align="center"><h1>Автори</h1>
-<p>
-    <a asp-action="Create">Додати автора</a>
-</p>
-    </div>
+@section FixedBar{
+    @foreach (var g in DataForFixedBar.Genres)
+    {
+        <a asp-area="" asp-controller="Home" asp-action="GenreFilter" asp-route-id="@g.Id">@g.Name</a>
+    }
+    <h2 style="margin: 0.15em 0 0.1em 0.1em; color: #343434; font-size: 20px; font-weight: normal; text-transform: uppercase; font-family: 'Orienta', sans-serif; letter-spacing: 1px;">Автори за країною</h2>
+    @foreach (var c in DataForFixedBar.Countries)
+    {
+        <a asp-area="" asp-controller="Home" asp-action="CountryFilter" asp-route-id="@c.Id">@c.Name</a>
+    }
+}
+<div class="layer1" align="center">
+    <h1>Автори</h1>
+    <p>
+        <a asp-action="Create">Додати автора</a>
+    </p>
+</div>
 <div class="layer2">
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstName)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstName)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
                 <tr>
                     <td>
                         @Html.ActionLink((string)@item.FirstName + " " + @item.LastName, "Details", "Authors", new { id = (int)@item.Id }, null)
@@ -44,7 +55,7 @@
                         <a asp-action="Delete" asp-route-id="@item.Id">Видалити</a>
                     </td>
                 </tr>
-        }
-    </tbody>
-</table>
+            }
+        </tbody>
+    </table>
 </div>

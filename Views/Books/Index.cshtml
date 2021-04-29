@@ -3,7 +3,17 @@
 @{
     ViewData["Title"] = "Index";
 }
-
+@section FixedBar{
+    @foreach (var g in DataForFixedBar.Genres)
+    {
+        <a asp-area="" asp-controller="Home" asp-action="GenreFilter" asp-route-id="@g.Id">@g.Name</a>
+    }
+    <h2 style="margin: 0.15em 0 0.1em 0.1em; color: #343434; font-size: 20px; font-weight: normal; text-transform: uppercase; font-family: 'Orienta', sans-serif; letter-spacing: 1px;">Автори за країною</h2>
+    @foreach (var c in DataForFixedBar.Countries)
+    {
+        <a asp-area="" asp-controller="Home" asp-action="CountryFilter" asp-route-id="@c.Id">@c.Name</a>
+    }
+}
 <style>
     .layer1 {
         background-color: #47e59111;
@@ -18,33 +28,46 @@
 </style>
 
 <div align="center" class="layer1">
-<h1>Книжки</h1>
-<p>
-    <a asp-action="Create">Додати нову</a>
-</p>
+    <h1>Книжки</h1>
+    <p>
+        <a asp-action="Create">Додати нову</a>
+    </p>
+    <h2>Імпорт excel-файлу</h2>
+    @using (Html.BeginForm("Import", "Books", FormMethod.Post, new { enctype = "multipart/form-data", id = "frm-excel" }))
+    {
+            <input type="file" name="fileExcel" id="fileExcel" value="Виберіть файл" required />
+            <div>
+                <input type="submit" value="Завантажити" />
+            </div>
+    }
+    <div>
+    <h2>Експорт excel-файлу</h2>
+    <a asp-action="Export">Завантажити</a>
+        </div>
 </div>
 <div class="layer2">
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.ActionLink((string)@item.Name, "Details", "Books", new { id = (int)@item.Id }, null)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Редагувати</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Видалити</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.ActionLink((string)@item.Name, "Details", "Books", new { id = (int)@item.Id }, null)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Редагувати</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Видалити</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
