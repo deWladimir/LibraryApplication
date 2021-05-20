@@ -10,6 +10,7 @@ using System.IO;
 using Microsoft.AspNetCore.Http;
 using ClosedXML.Excel;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LibraryApplication.Controllers
 {
@@ -21,13 +22,13 @@ namespace LibraryApplication.Controllers
         {
             _context = context;
         }
-
+        [Authorize(Roles = "admin, user")]
         // GET: Books
         public async Task<IActionResult> Index()
         {
             return View(await _context.Books.ToListAsync());
         }
-
+        [Authorize(Roles = "admin, user")]
         // GET: Books/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -57,7 +58,7 @@ namespace LibraryApplication.Controllers
 
             return View(book);
         }
-
+        [Authorize(Roles = "admin")]
         // GET: Books/Create
         public IActionResult Create()
         {
@@ -65,7 +66,7 @@ namespace LibraryApplication.Controllers
             ViewBag.Authors = _context.Authors.ToList();
             return View();
         }
-
+        [Authorize(Roles = "admin")]
         // POST: Books/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -115,7 +116,7 @@ namespace LibraryApplication.Controllers
             ViewBag.Authors = _context.Authors.ToList();
             return View(book);
         }
-
+        [Authorize(Roles = "admin")]
         // GET: Books/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -156,7 +157,7 @@ namespace LibraryApplication.Controllers
             }
             return View(book);
         }
-
+        [Authorize(Roles = "admin")]
         // POST: Books/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -254,7 +255,7 @@ namespace LibraryApplication.Controllers
             ViewBag.OtherAuthors = _context.Authors.Where(obj => !thisFullNames.Contains(obj.FirstName + " " + obj.LastName)).ToList();
             return View(book);
         }
-
+        [Authorize(Roles = "admin")]
         // GET: Books/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -283,7 +284,7 @@ namespace LibraryApplication.Controllers
 
             return View(book);
         }
-
+        [Authorize(Roles = "admin")]
         // POST: Books/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -304,7 +305,7 @@ namespace LibraryApplication.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
+        [Authorize(Roles = "admin, user")]
         public VirtualFileResult Download(int id)
         {
             var book =  _context.Books.Where(obj=>obj.Id==id).FirstOrDefault();
@@ -316,7 +317,7 @@ namespace LibraryApplication.Controllers
         {
             return _context.Books.Any(e => e.Id == id);
         }
-
+        [Authorize(Roles = "admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Import(IFormFile fileExcel)
@@ -446,6 +447,7 @@ namespace LibraryApplication.Controllers
             return View();
         }
 
+        [Authorize(Roles = "admin, user")]
         public ActionResult Export()
         {
             using (XLWorkbook workbook = new XLWorkbook(XLEventTracking.Disabled))

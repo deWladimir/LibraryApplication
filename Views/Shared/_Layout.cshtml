@@ -37,11 +37,31 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Countries" asp-action="Index">Країни</a>
                         </li>
+                        @if (User.IsInRole("admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Roles" asp-action="Index">Користувачі</a>
+                            </li>
+                        }
                     </ul>
                     <form class="form-inline my-2 my-lg-0 mr-0" asp-controller="Home" asp-action="Search" method="post">
                         <input id="querySearch" class="form-control mr-sm-2" name="query" type="text" placeholder="За автором або назвою книги" aria-label="Search" required>
                         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Пошук</button>
                     </form>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <p>@User.Identity.Name</p>
+
+                        <form method="post" asp-controller="Account" asp-action="Logout">
+                            <input type="submit" value="Вихід" />
+                        </form>
+                    }
+                    else
+                    {
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Вхід</a>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Реєстрація</a>
+
+                    }
                 </div>
             </div>
         </nav>

@@ -198,3 +198,16 @@ C:\Users\User\source\repos\LibraryApplication\LibraryApplication\bin\Debug\net5.
 C:\Users\User\source\repos\LibraryApplication\LibraryApplication\bin\Debug\net5.0\ExcelNumberFormat.dll
 C:\Users\User\source\repos\LibraryApplication\LibraryApplication\bin\Debug\net5.0\System.IO.Packaging.dll
 C:\Users\User\source\repos\LibraryApplication\LibraryApplication\obj\Debug\net5.0\Razor\Views\Books\Import.cshtml.g.cs
+C:\Users\User\source\repos\LibraryApplication\LibraryApplication\bin\Debug\net5.0\Microsoft.AspNetCore.Cryptography.Internal.dll
+C:\Users\User\source\repos\LibraryApplication\LibraryApplication\bin\Debug\net5.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+C:\Users\User\source\repos\LibraryApplication\LibraryApplication\bin\Debug\net5.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+C:\Users\User\source\repos\LibraryApplication\LibraryApplication\bin\Debug\net5.0\Microsoft.Extensions.Identity.Core.dll
+C:\Users\User\source\repos\LibraryApplication\LibraryApplication\bin\Debug\net5.0\Microsoft.Extensions.Identity.Stores.dll
+C:\Users\User\source\repos\LibraryApplication\LibraryApplication\obj\Debug\net5.0\Razor\Views\Account\Login.cshtml.g.cs
+C:\Users\User\source\repos\LibraryApplication\LibraryApplication\obj\Debug\net5.0\Razor\Views\Account\Register.cshtml.g.cs
+C:\Users\User\source\repos\LibraryApplication\LibraryApplication\obj\Debug\net5.0\Razor\Views\Roles\Edit.cshtml.g.cs
+C:\Users\User\source\repos\LibraryApplication\LibraryApplication\obj\Debug\net5.0\Razor\Views\Roles\Index.cshtml.g.cs
+C:\Users\User\source\repos\LibraryApplication\LibraryApplication\obj\Debug\net5.0\Razor\Views\Roles\UserList.cshtml.g.cs
+C:\Users\User\source\repos\LibraryApplication\LibraryApplication\obj\Debug\net5.0\Razor\Views\Account\Create.cshtml.g.cs
+C:\Users\User\source\repos\LibraryApplication\LibraryApplication\obj\Debug\net5.0\Razor\Views\Account\Edit.cshtml.g.cs
+C:\Users\User\source\repos\LibraryApplication\LibraryApplication\obj\Debug\net5.0\Razor\Views\Account\ChangePassword.cshtml.g.cs

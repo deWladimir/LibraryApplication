@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 
 using LibraryApplication.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using LibraryApplication.Validators;
 
 
 namespace LibraryApplication
@@ -27,10 +29,28 @@ namespace LibraryApplication
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<IUserValidator<User>, CustomUserValidator>();
+
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<DBLibraryContext>(options => options.UseSqlServer(connection));
             services.AddControllersWithViews();
-        }
+
+            string connectionIdentity = Configuration.GetConnectionString("IdentityConnection");
+            services.AddDbContext<IdentityContext>(options => options.UseSqlServer(connectionIdentity));
+            services.AddControllersWithViews();
+
+            services.AddIdentity<User, IdentityRole>(options => {
+                options.Password.RequiredLength = 6;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireDigit = true;
+
+                options.User.RequireUniqueEmail = true;
+            })
+                .AddEntityFrameworkStores<IdentityContext>();
+        
+    }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -51,6 +71,8 @@ namespace LibraryApplication
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

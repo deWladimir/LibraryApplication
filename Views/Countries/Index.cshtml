@@ -30,7 +30,10 @@
 <div class="layer1" align="center">
     <h1>Країни</h1>
     <p>
-        <a asp-action="Create">Додати країну</a>
+        @if (User.IsInRole("admin"))
+        {
+            <a asp-action="Create">Додати країну</a>
+        }
     </p>
 </div>
 
@@ -52,7 +55,10 @@
                         @Html.ActionLink((string)@item.Name, "Details", "Countries", new { id = (int)@item.Id }, null)
                     </td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id">Редагувати</a>
+                        @if (User.IsInRole("admin"))
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.Id">Редагувати</a>
+                        }
                     </td>
                 </tr>
             }

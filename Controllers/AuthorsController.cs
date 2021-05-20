@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LibraryApplication;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LibraryApplication.Controllers
 {
@@ -17,13 +18,14 @@ namespace LibraryApplication.Controllers
         {
             _context = context;
         }
-
+        [Authorize(Roles = "admin, user")]
         // GET: Authors
         public async Task<IActionResult> Index()
         {
             return View(await _context.Authors.ToListAsync());
         }
 
+        [Authorize(Roles = "admin, user")]
         // GET: Authors/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -54,6 +56,8 @@ namespace LibraryApplication.Controllers
             return View(author);
         }
 
+        [Authorize(Roles = "admin")]
+
         // GET: Authors/Create
         public IActionResult Create()
         {
@@ -64,6 +68,8 @@ namespace LibraryApplication.Controllers
         // POST: Authors/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
+        [Authorize(Roles = "admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,Info,BirthYear,DeathYear")] Author author, List<int> countries)
@@ -102,7 +108,7 @@ namespace LibraryApplication.Controllers
             ViewBag.CountriesList = _context.Countries.ToList();
             return View();
         }
-
+        [Authorize(Roles = "admin")]
         // GET: Authors/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -131,7 +137,7 @@ namespace LibraryApplication.Controllers
             }
             return View(author);
         }
-
+        [Authorize(Roles = "admin")]
         // POST: Authors/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -214,6 +220,8 @@ namespace LibraryApplication.Controllers
             return View(author);
         }
 
+        [Authorize(Roles = "admin")]
+
         // GET: Authors/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -237,7 +245,7 @@ namespace LibraryApplication.Controllers
 
             return View(author);
         }
-
+        [Authorize(Roles = "admin")]
         // POST: Authors/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

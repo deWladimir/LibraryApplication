@@ -30,7 +30,10 @@
 <div class="layer1" align="center">
     <h1>Автори</h1>
     <p>
-        <a asp-action="Create">Додати автора</a>
+        @if (User.IsInRole("admin"))
+        {
+            <a asp-action="Create">Додати автора</a>
+        }
     </p>
 </div>
 <div class="layer2">
@@ -46,15 +49,18 @@
         <tbody>
             @foreach (var item in Model)
             {
-                <tr>
-                    <td>
-                        @Html.ActionLink((string)@item.FirstName + " " + @item.LastName, "Details", "Authors", new { id = (int)@item.Id }, null)
-                    </td>
+            <tr>
+                <td>
+                    @Html.ActionLink((string)@item.FirstName + " " + @item.LastName, "Details", "Authors", new { id = (int)@item.Id }, null)
+                </td>
+                @if (User.IsInRole("admin"))
+                {
                     <td>
                         <a asp-action="Edit" asp-route-id="@item.Id">Редагувати</a> |
                         <a asp-action="Delete" asp-route-id="@item.Id">Видалити</a>
                     </td>
-                </tr>
+                } 
+            </tr>
             }
         </tbody>
     </table>

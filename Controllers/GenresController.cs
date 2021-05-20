@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LibraryApplication;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LibraryApplication.Controllers
 {
@@ -17,13 +18,13 @@ namespace LibraryApplication.Controllers
         {
             _context = context;
         }
-
+        [Authorize(Roles = "admin, user")]
         // GET: Genres
         public async Task<IActionResult> Index()
         {
             return View(await _context.Genres.ToListAsync());
         }
-
+        [Authorize(Roles = "admin, user")]
         // GET: Genres/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -48,13 +49,13 @@ namespace LibraryApplication.Controllers
 
             return View(genre);
         }
-
+        [Authorize(Roles = "admin")]
         // GET: Genres/Create
         public IActionResult Create()
         {
             return View();
         }
-
+        [Authorize(Roles = "admin")]
         // POST: Genres/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -70,7 +71,7 @@ namespace LibraryApplication.Controllers
             }
             return View(genre);
         }
-
+        [Authorize(Roles = "admin")]
         // GET: Genres/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -86,7 +87,7 @@ namespace LibraryApplication.Controllers
             }
             return View(genre);
         }
-
+        [Authorize(Roles = "admin")]
         // POST: Genres/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -121,7 +122,7 @@ namespace LibraryApplication.Controllers
             }
             return View(genre);
         }
-
+        [Authorize(Roles = "admin")]
         // GET: Genres/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -139,7 +140,7 @@ namespace LibraryApplication.Controllers
 
             return View(genre);
         }
-
+        [Authorize(Roles = "admin")]
         // POST: Genres/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
