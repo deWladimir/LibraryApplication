@@ -211,3 +211,9 @@ C:\Users\User\source\repos\LibraryApplication\LibraryApplication\obj\Debug\net5.
 C:\Users\User\source\repos\LibraryApplication\LibraryApplication\obj\Debug\net5.0\Razor\Views\Account\Create.cshtml.g.cs
 C:\Users\User\source\repos\LibraryApplication\LibraryApplication\obj\Debug\net5.0\Razor\Views\Account\Edit.cshtml.g.cs
 C:\Users\User\source\repos\LibraryApplication\LibraryApplication\obj\Debug\net5.0\Razor\Views\Account\ChangePassword.cshtml.g.cs
+C:\Users\User\source\repos\LibraryApplication\LibraryApplication\obj\Debug\net5.0\Razor\Views\Requests\Index.cshtml.g.cs
+C:\Users\User\source\repos\LibraryApplication\LibraryApplication\obj\Debug\net5.0\Razor\Views\Requests\Request1.cshtml.g.cs
+C:\Users\User\source\repos\LibraryApplication\LibraryApplication\obj\Debug\net5.0\Razor\Views\Requests\Request2.cshtml.g.cs
+C:\Users\User\source\repos\LibraryApplication\LibraryApplication\obj\Debug\net5.0\Razor\Views\Requests\Request3.cshtml.g.cs
+C:\Users\User\source\repos\LibraryApplication\LibraryApplication\obj\Debug\net5.0\Razor\Views\Requests\Request4.cshtml.g.cs
+C:\Users\User\source\repos\LibraryApplication\LibraryApplication\obj\Debug\net5.0\Razor\Views\Requests\Request5.cshtml.g.cs

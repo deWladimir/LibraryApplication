@@ -1,0 +1,97 @@
+﻿
+@section FixedBar{
+    @foreach (var g in DataForFixedBar.Genres)
+    {
+        <a asp-area="" asp-controller="Home" asp-action="GenreFilter" asp-route-id="@g.Id">@g.Name</a>
+    }
+    <h2 style="margin: 0.15em 0 0.1em 0.1em; color: #343434; font-size: 20px; font-weight: normal; text-transform: uppercase; font-family: 'Orienta', sans-serif; letter-spacing: 1px;">Автори за країною</h2>
+    @foreach (var c in DataForFixedBar.Countries)
+    {
+        <a asp-area="" asp-controller="Home" asp-action="CountryFilter" asp-route-id="@c.Id">@c.Name</a>
+    }
+}
+<h1>Запити</h1>
+<form asp-action="Request1">
+    <label>
+        Знайти книжки за вказаною країною
+    </label>
+    <div class="form-group">
+        <label>Виберіть країну</label>
+        <select id="countrychoose" name="country" required>
+            @foreach (var item in ViewBag.Countries)
+            {
+                <option value=@item.Id>@item.Name</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Шукати" class="btn btn-primary" />
+    </div>
+</form>
+
+<form asp-action="Request2">
+    <label>
+        Знайти авторів за вказаним жанром
+    </label>
+    <div class="form-group">
+        <label>Виберіть жанр</label>
+        <select id="genrechoose" name="genre" required>
+            @foreach (var item in ViewBag.Genres)
+            {
+                <option value=@item.Id>@item.Name</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Шукати" class="btn btn-primary" />
+    </div>
+</form>
+
+<form asp-action="Request3">
+    <label>
+        Знайти жанри, у яких писав вказаний автор
+    </label>
+    <div class="form-group">
+        <label>Виберіть автора</label>
+        <select id="authorchoose" name="author" required>
+            @foreach (var item in ViewBag.Authors)
+            {
+                <option value=@item.Id>@item.FirstName @item.LastName</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Шукати" class="btn btn-primary" />
+    </div>
+</form>
+
+<form asp-action="Request4">
+    <label>
+        Знайти книжки не вказаного жанру
+    </label>
+    <div class="form-group">
+        <label>Виберіть жанр</label>
+        <select id="genrechoose" name="genre" required>
+            @foreach (var item in ViewBag.Genres)
+            {
+                <option value=@item.Id>@item.Name</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Шукати" class="btn btn-primary" />
+    </div>
+</form>
+
+<form asp-action="Request5">
+    <label>
+        Знайти авторів, які написали книжки з кількістю сторінок більшою за
+    </label>
+    <div class="form-group">
+        <label>Введіть кількість сторінок</label>
+        <input type="number" min="1" required name="num">
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Шукати" class="btn btn-primary" />
+    </div>
+</form>

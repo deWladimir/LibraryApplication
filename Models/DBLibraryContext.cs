@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using LibraryApplication.ViewModel;
 
 #nullable disable
 
@@ -25,6 +26,10 @@ namespace LibraryApplication
         public virtual DbSet<Country> Countries { get; set; }
         public virtual DbSet<Genre> Genres { get; set; }
         public virtual DbSet<GenresBook> GenresBooks { get; set; }
+
+        public virtual DbSet<FirstRequest> FirstRequests { get; set; }
+
+        public virtual DbSet<SecondRequest> SecondRequests { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

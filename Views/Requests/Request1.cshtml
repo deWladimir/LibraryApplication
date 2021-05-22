@@ -1,0 +1,22 @@
+﻿@section FixedBar{
+    @foreach (var g in DataForFixedBar.Genres)
+    {
+        <a asp-area="" asp-controller="Home" asp-action="GenreFilter" asp-route-id="@g.Id">@g.Name</a>
+    }
+    <h2 style="margin: 0.15em 0 0.1em 0.1em; color: #343434; font-size: 20px; font-weight: normal; text-transform: uppercase; font-family: 'Orienta', sans-serif; letter-spacing: 1px;">Автори за країною</h2>
+    @foreach (var c in DataForFixedBar.Countries)
+    {
+        <a asp-area="" asp-controller="Home" asp-action="CountryFilter" asp-route-id="@c.Id">@c.Name</a>
+    }
+}
+<h1>Результати першого запиту</h1>
+<h2>Шукані книжки</h2>
+<ul>
+    @foreach (var item in ViewBag.Result)
+    {
+        <li>@Html.ActionLink((string)@item.Name, "Details", "Books", new { id = (int)item.Id }, null)</li>
+    }
+</ul>
+<form asp-action="Index">
+    <input type="submit" value="На сторінку с запитами" class="btn btn-primary" />
+</form>
